@@ -1,0 +1,16 @@
+# dependencies
+node_modules/
+
+# environment files
+.env
+*.env
+**/.env
+**/*.env
+
+# build files
+dist/
+build/
+
+# misc
+.DS_Store
+.vscode/
