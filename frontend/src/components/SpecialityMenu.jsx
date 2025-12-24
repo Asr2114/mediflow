@@ -33,7 +33,7 @@ const SpecialityMenu = () => {
     <div id='speciality' className='flex flex-col items-center gap-4 sm:gap-6 py-12 sm:py-20 text-gray-800 px-4'>
         <div className='text-center mb-4 animate-fade-in-up'>
           <h1 className='text-3xl sm:text-4xl lg:text-5xl font-bold text-center mb-3'>
-            Find by <span className='bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent'>Speciality</span>
+            Find by <span className='bg-linear-to-r from-primary to-indigo-600 bg-clip-text text-transparent'>Speciality</span>
           </h1>
           <p className='text-sm sm:text-base w-full sm:w-2/3 lg:w-1/2 text-center text-gray-600 mx-auto'>
             Simply browse through our extensive list of trusted doctors, schedule your appointment hassle-free.

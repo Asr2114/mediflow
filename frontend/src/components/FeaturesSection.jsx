@@ -41,11 +41,11 @@ const FeaturesSection = () => {
   ]
 
   return (
-    <div className='py-16 sm:py-24 px-4 bg-gradient-to-b from-gray-50 to-white'>
+    <div className='py-16 sm:py-24 px-4 bg-linear-to-b from-gray-50 to-white'>
       <div className='max-w-7xl mx-auto'>
         <div className='text-center mb-12 animate-fade-in-up'>
           <h2 className='text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4'>
-            Why Choose <span className='bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent'>MediFlow</span>
+            Why Choose <span className='bg-linear-to-r from-primary to-indigo-600 bg-clip-text text-transparent'>MediFlow</span>
           </h2>
           <p className='text-gray-600 text-sm sm:text-base max-w-2xl mx-auto'>
             Experience healthcare reimagined with cutting-edge features
@@ -56,12 +56,12 @@ const FeaturesSection = () => {
           {features.map((feature, index) => (
             <div 
               key={index}
-              className='group relative bg-white rounded-3xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 card-hover animate-scale-in'
+              className='group relative bg-white rounded-3xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-primary/20 hover:-translate-y-2 animate-scale-in'
               style={{animationDelay: `${index * 0.1}s`}}
             >
-              <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 rounded-3xl transition-opacity duration-500`}></div>
+              <div className={`absolute inset-0 bg-linear-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 rounded-3xl transition-opacity duration-500`}></div>
               <div className='relative z-10'>
-                <div className={`w-16 h-16 bg-gradient-to-br ${feature.gradient} rounded-2xl flex items-center justify-center text-3xl mb-4 transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-lg`}>
+                <div className={`w-16 h-16 bg-linear-to-br ${feature.gradient} rounded-2xl flex items-center justify-center text-3xl mb-4 transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-lg`}>
                   {feature.icon}
                 </div>
                 <h3 className='text-xl sm:text-2xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors duration-300'>

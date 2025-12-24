@@ -12,7 +12,7 @@ const TopDoctors = () => {
     <div className='flex flex-col items-center gap-4 sm:gap-6 my-12 sm:my-20 text-gray-900 md:mx-10 px-4'>
         <div className='text-center mb-6 animate-fade-in-up'>
           <h1 className='text-3xl sm:text-4xl lg:text-5xl font-bold text-center mb-3'>
-            Top <span className='bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent'>Doctors</span> to Book
+            Top <span className='bg-linear-to-r from-primary to-indigo-600 bg-clip-text text-transparent'>Doctors</span> to Book
           </h1>
           <p className='w-full sm:w-2/3 lg:w-1/2 text-center text-sm sm:text-base text-gray-600 mx-auto'>
             Simply browse through our extensive list of trusted doctors.
@@ -24,23 +24,31 @@ const TopDoctors = () => {
                 <div 
                     onClick={()=>{navigate(`/appointment/${item._id}`); scrollTo(0,0)}} 
                     key={index} 
-                    className='group relative bg-white border border-gray-200 rounded-2xl overflow-hidden cursor-pointer card-hover shadow-lg hover:shadow-2xl animate-scale-in'
+                    className='group relative bg-white border border-gray-100 rounded-2xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl hover:border-primary/20 animate-scale-in transition-all duration-500'
                     style={{animationDelay: `${index * 0.05}s`}}
                 >
+                    {/* Premium badge for top doctors */}
+                    {index < 3 && (
+                      <div className='absolute top-3 left-3 z-10 bg-linear-to-r from-amber-400 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg'>
+                        ⭐ Top Rated
+                      </div>
+                    )}
                     <div className='relative overflow-hidden'>
-                        <div className='absolute inset-0 bg-gradient-to-br from-primary/10 to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
-                        <img className='bg-gradient-to-br from-blue-50 to-indigo-50 w-full h-auto transform group-hover:scale-110 transition-transform duration-700' src={item.image} alt={item.name} />
+                        <div className='absolute inset-0 bg-linear-to-br from-primary/10 to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
+                        <img className='bg-linear-to-br from-blue-50 to-indigo-50 w-full h-auto transform group-hover:scale-110 transition-transform duration-700' src={item.image} alt={item.name} />
                     </div>
                     <div className='p-3 sm:p-5 relative'>
                         <div className='flex items-center gap-2 text-xs sm:text-sm mb-2'>
                             <div className='relative'>
-                                <div className='absolute inset-0 bg-green-400 rounded-full blur-sm opacity-50'></div>
-                                <p className='relative w-2 h-2 bg-green-500 rounded-full animate-pulse'></p>
+                                <div className={`absolute inset-0 ${item.available ? 'bg-green-400' : 'bg-red-400'} rounded-full blur-sm opacity-50`}></div>
+                                <p className={`relative w-2 h-2 ${item.available ? 'bg-green-500' : 'bg-red-500'} rounded-full ${item.available ? 'animate-pulse' : ''}`}></p>
                             </div>
-                            <p className='text-green-600 font-medium'>Available</p>
+                            <p className={`${item.available ? 'text-green-600' : 'text-red-500'} font-medium`}>
+                              {item.available ? 'Available' : 'Unavailable'}
+                            </p>
                         </div>
                         <p className='text-gray-900 text-base sm:text-lg font-bold mb-1 group-hover:text-primary transition-colors duration-300'>{item.name}</p>
-                        <p className='text-gray-600 text-xs sm:text-sm'>{item.speciality}</p>
+                        <p className='text-gray-500 text-xs sm:text-sm'>{item.speciality}</p>
                     </div>
                 </div>
 
@@ -49,9 +57,14 @@ const TopDoctors = () => {
         </div>
         <button 
             onClick={()=>{navigate('/doctors'); scrollTo(0,0)}} 
-            className='group relative bg-gradient-to-r from-blue-100 to-indigo-100 text-gray-700 px-8 sm:px-12 py-3 sm:py-4 rounded-full mt-8 sm:mt-12 text-sm sm:text-base font-semibold overflow-hidden liquid-button shadow-lg hover:shadow-xl transition-all duration-500 hover:text-primary'
+            className='group relative bg-linear-to-r from-primary to-indigo-600 text-white px-8 sm:px-12 py-3 sm:py-4 rounded-full mt-8 sm:mt-12 text-sm sm:text-base font-semibold overflow-hidden shadow-lg hover:shadow-xl hover:shadow-primary/30 transition-all duration-500 hover:scale-105'
         >
-            <span className='relative z-10'>View More Doctors</span>
+            <span className='relative z-10 flex items-center gap-2'>
+              View More Doctors
+              <svg className='w-4 h-4 group-hover:translate-x-1 transition-transform duration-300' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M13 7l5 5m0 0l-5 5m5-5H6' />
+              </svg>
+            </span>
         </button>
     </div>
   )

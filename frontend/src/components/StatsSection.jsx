@@ -13,7 +13,7 @@ const StatsSection = () => {
       <div className='max-w-7xl mx-auto'>
         <div className='text-center mb-12 animate-fade-in-up'>
           <h2 className='text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4'>
-            Trusted by <span className='bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent'>Thousands</span>
+            Trusted by <span className='bg-linear-to-r from-primary to-indigo-600 bg-clip-text text-transparent'>Thousands</span>
           </h2>
           <p className='text-gray-600 text-sm sm:text-base max-w-2xl mx-auto'>
             Join thousands of satisfied patients who trust MediFlow for their healthcare needs

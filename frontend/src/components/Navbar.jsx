@@ -6,7 +6,7 @@ import { AppContext } from '../context/AppContext';
 
 const Navbar = () => {
 
-    const { token, setToken } = useContext(AppContext);
+    const { token, setToken , userData} = useContext(AppContext);
 
     const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ const Navbar = () => {
 
 
     return (
-        <nav className='flex items-center justify-between text-sm py-3 sm:py-5 mb-4 sm:mb-6 border-b border-gray-200'>
+        <nav className='sticky top-0 z-50 flex items-center justify-between text-sm py-3 sm:py-5 mb-4 sm:mb-6 border-b border-gray-200 bg-white/95 backdrop-blur-xl'>
             <Logo className="relative" />
 
             <ul className='hidden md:flex items-center gap-8 font-medium'>
@@ -74,18 +74,18 @@ const Navbar = () => {
 
                     
                 >
-                    <li className='py-1 transition-colors duration-200 text-primary border rounded-2xl px-2'>Admin Panel</li>
+                    <li className='py-1.5 px-4 transition-all duration-300 text-white bg-linear-to-r from-primary to-indigo-600 border border-primary rounded-full text-xs font-semibold hover:shadow-lg hover:shadow-primary/30 hover:scale-105'>Admin Panel</li>
                     <hr className='nav-indicator border-none outline-none h-0.5 bg-primary w-3/5 m-auto transition-all duration-300 hidden group-hover:block' />
                 </NavLink>            
             </ul>
 
             <div className='flex items-center gap-2 sm:gap-4'>
                 {
-                    token
+                    token && userData
                         ? <div className='hidden sm:flex gap-2 items-center cursor-pointer group relative'>
                             <div className='flex items-center gap-2 hover:opacity-90 transition-opacity relative'>
                                 <div className='absolute inset-0 bg-primary/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
-                                <img className='relative w-10 h-10 rounded-full object-cover ring-2 ring-gray-200 group-hover:ring-primary group-hover:ring-4 transition-all duration-300 shadow-lg group-hover:shadow-primary/50' src={assets.profile_pic} alt="Profile" />
+                                <img className='relative w-10 h-10 rounded-full object-cover ring-2 ring-gray-200 group-hover:ring-primary group-hover:ring-4 transition-all duration-300 shadow-lg group-hover:shadow-primary/50' src={userData.image} alt="Profile" />
                                 <div className='relative'>
                                     <img className='w-3 transition-transform duration-300 group-hover:rotate-180' src={assets.dropdown_icon} alt="" />
                                 </div>
@@ -153,7 +153,7 @@ const Navbar = () => {
                         </div>
                         : <button
                             onClick={() => navigate('/login')}
-                            className='cursor-pointer bg-primary text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium hidden md:block hover:bg-opacity-90 hover:shadow-md transition-all duration-200 active:scale-95'
+                            className='cursor-pointer bg-linear-to-r from-primary to-indigo-600 text-white px-5 sm:px-8 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-semibold hidden md:block hover:shadow-lg hover:shadow-primary/30 transition-all duration-300 active:scale-95 btn-premium'
                         >
                             Create Account
                         </button>

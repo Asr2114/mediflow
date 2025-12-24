@@ -94,28 +94,28 @@ const Login = () => {
   },[token])
 
   return (
-    <div className='min-h-screen bg-linear-to-br from-white via-gray-50 to-blue-50 flex items-center justify-center p-4 relative overflow-hidden py-20'>
+    <div className='min-h-screen bg-linear-to-br from-white via-gray-50 to-blue-50 flex items-center justify-center p-3 sm:p-4 relative overflow-hidden py-12 sm:py-16 lg:py-20'>
       {/* Animated Background Elements */}
       <div className='absolute inset-0 overflow-hidden'>
-        <div className='absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse opacity-30'></div>
-        <div className='absolute top-1/3 right-1/4 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl opacity-20' style={{animation: 'float 8s ease-in-out infinite'}}></div>
-        <div className='absolute bottom-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl opacity-20'></div>
+        <div className='absolute top-0 left-1/4 w-48 sm:w-72 lg:w-96 h-48 sm:h-72 lg:h-96 bg-primary/10 rounded-full blur-3xl animate-pulse opacity-30'></div>
+        <div className='absolute top-1/3 right-1/4 w-40 sm:w-60 lg:w-80 h-40 sm:h-60 lg:h-80 bg-indigo-500/10 rounded-full blur-3xl opacity-20' style={{animation: 'float 8s ease-in-out infinite'}}></div>
+        <div className='absolute bottom-0 right-0 w-48 sm:w-72 lg:w-96 h-48 sm:h-72 lg:h-96 bg-blue-500/10 rounded-full blur-3xl opacity-20'></div>
       </div>
 
       {/* Main Container */}
-      <div className='relative z-10 w-full max-w-6xl rounded-3xl overflow-hidden shadow-2xl border border-gray-200/50'>
-        <div className='grid grid-cols-1 md:grid-cols-2'>
+      <div className='relative z-10 w-full max-w-6xl rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-gray-200/50'>
+        <div className='grid grid-cols-1 lg:grid-cols-2'>
           
           {/* Left Side - Image Section */}
-          <div className='hidden md:flex md:flex-col items-center justify-center bg-linear-to-br from-primary/5 via-indigo-500/5 to-blue-500/5 backdrop-blur-xl border-r border-gray-200 relative overflow-hidden p-8 md:p-12'>
+          <div className='hidden lg:flex lg:flex-col items-center justify-center bg-linear-to-br from-primary/5 via-indigo-500/5 to-blue-500/5 backdrop-blur-xl border-r border-gray-200 relative overflow-hidden p-8 lg:p-10 xl:p-12'>
             {/* Decorative Elements */}
             <div className='absolute top-0 left-0 w-40 h-40 bg-primary/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2'></div>
             <div className='absolute bottom-0 right-0 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl translate-x-1/2 translate-y-1/2'></div>
 
             {/* Content */}
-            <div className='relative z-10 text-center space-y-8'>
+            <div className='relative z-10 text-center space-y-6 lg:space-y-8'>
               {/* Medical Illustration */}
-              <div className='relative mx-auto w-48 h-48 md:w-56 md:h-56'>
+              <div className='relative mx-auto w-40 h-40 lg:w-48 lg:h-48 xl:w-56 xl:h-56'>
                 <div className='absolute inset-0 bg-linear-to-br from-primary/40 to-indigo-500/40 rounded-3xl blur-2xl opacity-75'></div>
                 <div className='absolute inset-0 flex items-center justify-center'>
                   <svg viewBox='0 0 200 200' className='w-full h-full'>
@@ -155,11 +155,11 @@ const Login = () => {
               </div>
 
               {/* Text Content */}
-              <div className='space-y-4'>
-                <h2 className='text-3xl md:text-4xl font-bold text-gray-800'>
+              <div className='space-y-3 lg:space-y-4'>
+                <h2 className='text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-800'>
                   Welcome to <span className='bg-linear-to-r from-primary via-indigo-600 to-blue-600 bg-clip-text text-transparent'>MediFlow</span>
                 </h2>
-                <p className='text-gray-600 text-sm md:text-base leading-relaxed max-w-sm'>
+                <p className='text-gray-600 text-sm lg:text-base leading-relaxed max-w-sm'>
                   {state === 'Sign Up' 
                     ? 'Join thousands of patients who have simplified their healthcare journey with our modern appointment platform.'
                     : 'Access your healthcare profile and manage your medical appointments seamlessly.'
@@ -167,7 +167,7 @@ const Login = () => {
                 </p>
 
                 {/* Features */}
-                <div className='space-y-3 pt-4'>
+                <div className='space-y-2 lg:space-y-3 pt-3 lg:pt-4'>
                   {[
                     { icon: '✓', text: 'Easy appointment booking' },
                     { icon: '✓', text: 'Connect with top specialists' },
@@ -182,7 +182,7 @@ const Login = () => {
               </div>
 
               {/* Bottom decoration */}
-              <div className='flex justify-center gap-2 pt-4'>
+              <div className='flex justify-center gap-2 pt-3 lg:pt-4'>
                 {[0, 1, 2].map((dot) => (
                   <div 
                     key={dot}
@@ -198,17 +198,17 @@ const Login = () => {
           </div>
 
           {/* Right Side - Form Section */}
-          <div className='flex flex-col items-center justify-center bg-white backdrop-blur-2xl p-8 md:p-12 relative'>
+          <div className='flex flex-col items-center justify-center bg-white backdrop-blur-2xl p-5 sm:p-6 md:p-8 lg:p-10 xl:p-12 relative'>
             {/* Decorative blur */}
-            <div className='absolute top-0 right-0 w-40 h-40 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2'></div>
+            <div className='absolute top-0 right-0 w-32 sm:w-40 h-32 sm:h-40 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2'></div>
 
             <div className='relative z-10 w-full max-w-md'>
               {/* Header */}
-              <div className='text-center mb-10'>
-                <h1 className='text-3xl md:text-4xl font-bold text-gray-800 mb-2'>
+              <div className='text-center mb-6 sm:mb-8 lg:mb-10'>
+                <h1 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-1.5 sm:mb-2'>
                   {state === 'Sign Up' ? 'Create Account' : 'Login'}
                 </h1>
-                <p className='text-gray-600 text-sm'>
+                <p className='text-gray-600 text-xs sm:text-sm'>
                   {state === 'Sign Up' 
                     ? 'Join us to book your first appointment'
                     : 'Welcome back to your healthcare journey'
@@ -217,11 +217,11 @@ const Login = () => {
               </div>
 
               {/* Form */}
-              <form onSubmit={onSubmitHandler} className='space-y-5'>
+              <form onSubmit={onSubmitHandler} className='space-y-4 sm:space-y-5'>
                 {/* Full Name Field (Sign Up Only) */}
                 {state === 'Sign Up' && (
-                  <div className='space-y-2'>
-                    <label className='text-sm font-medium text-gray-700 block'>Full Name</label>
+                  <div className='space-y-1.5 sm:space-y-2'>
+                    <label className='text-xs sm:text-sm font-medium text-gray-700 block'>Full Name</label>
                     <div className='relative'>
                       <input
                         type='text'
@@ -231,7 +231,7 @@ const Login = () => {
                           if (errors.name) setErrors({...errors, name: ''})
                         }}
                         placeholder='John Doe'
-                        className={`w-full px-4 py-3 rounded-lg bg-gray-50 border transition-all duration-300 text-gray-900 placeholder-gray-500 focus:outline-none ${
+                        className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-gray-50 border transition-all duration-300 text-gray-900 placeholder-gray-500 focus:outline-none text-sm sm:text-base ${
                           errors.name 
                             ? 'border-red-500/50 focus:border-red-500' 
                             : 'border-gray-300 focus:border-primary/50 focus:bg-white'
@@ -243,8 +243,8 @@ const Login = () => {
                 )}
 
                 {/* Email Field */}
-                <div className='space-y-2'>
-                  <label className='text-sm font-medium text-gray-700 block'>Email Address</label>
+                <div className='space-y-1.5 sm:space-y-2'>
+                  <label className='text-xs sm:text-sm font-medium text-gray-700 block'>Email Address</label>
                   <div className='relative'>
                     <input
                       type='email'
@@ -254,7 +254,7 @@ const Login = () => {
                         if (errors.email) setErrors({...errors, email: ''})
                       }}
                       placeholder='you@example.com'
-                      className={`w-full px-4 py-3 rounded-lg bg-gray-50 border transition-all duration-300 text-gray-900 placeholder-gray-500 focus:outline-none ${
+                      className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-gray-50 border transition-all duration-300 text-gray-900 placeholder-gray-500 focus:outline-none text-sm sm:text-base ${
                         errors.email 
                           ? 'border-red-500/50 focus:border-red-500' 
                           : 'border-gray-300 focus:border-primary/50 focus:bg-white'
@@ -265,8 +265,8 @@ const Login = () => {
                 </div>
 
                 {/* Password Field */}
-                <div className='space-y-2'>
-                  <label className='text-sm font-medium text-gray-700 block'>Password</label>
+                <div className='space-y-1.5 sm:space-y-2'>
+                  <label className='text-xs sm:text-sm font-medium text-gray-700 block'>Password</label>
                   <div className='relative'>
                     <input
                       type={showPassword ? 'text' : 'password'}
@@ -276,7 +276,7 @@ const Login = () => {
                         if (errors.password) setErrors({...errors, password: ''})
                       }}
                       placeholder='••••••••'
-                      className={`w-full px-4 py-3 pr-12 rounded-lg bg-gray-50 border transition-all duration-300 text-gray-900 placeholder-gray-500 focus:outline-none ${
+                      className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 pr-10 sm:pr-12 rounded-lg bg-gray-50 border transition-all duration-300 text-gray-900 placeholder-gray-500 focus:outline-none text-sm sm:text-base ${
                         errors.password 
                           ? 'border-red-500/50 focus:border-red-500' 
                           : 'border-gray-300 focus:border-primary/50 focus:bg-white'
@@ -285,7 +285,7 @@ const Login = () => {
                     <button
                       type='button'
                       onClick={() => setShowPassword(!showPassword)}
-                      className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 transition-colors'
+                      className='absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800 transition-colors text-sm sm:text-base'
                     >
                       {showPassword ? '👁️' : '👁️‍🗨️'}
                     </button>
@@ -306,25 +306,30 @@ const Login = () => {
                 <button
                   type='submit'
                   disabled={isLoading}
-                  className='w-full bg-linear-to-r from-primary via-indigo-600 to-blue-600 hover:from-indigo-600 hover:via-blue-600 hover:to-primary text-white py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed mt-8 relative overflow-hidden group'
+                  className='w-full bg-linear-to-r from-primary via-indigo-600 to-primary text-white py-3 sm:py-4 rounded-lg sm:rounded-xl font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed mt-4 sm:mt-6 lg:mt-8 relative overflow-hidden btn-premium text-sm sm:text-base'
                 >
-                  <span className='relative z-10 flex items-center justify-center'>
+                  <span className='relative z-10 flex items-center justify-center gap-2'>
                     {isLoading ? (
                       <>
-                        <svg className='animate-spin -ml-1 mr-2 h-4 w-4' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'>
+                        <svg className='animate-spin -ml-1 mr-2 h-4 w-4 sm:h-5 sm:w-5' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'>
                           <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4'></circle>
                           <path className='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'></path>
                         </svg>
                         Processing...
                       </>
                     ) : (
-                      state === 'Sign Up' ? 'Create Account' : 'Login'
+                      <>
+                        {state === 'Sign Up' ? 'Create Account' : 'Login'}
+                        <svg className='w-4 h-4 sm:w-5 sm:h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                          <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M13 7l5 5m0 0l-5 5m5-5H6' />
+                        </svg>
+                      </>
                     )}
                   </span>
                 </button>
 
                 {/* Toggle between Sign Up and Login */}
-                <div className='pt-4 text-center text-sm'>
+                <div className='pt-3 sm:pt-4 text-center text-xs sm:text-sm'>
                   <span className='text-gray-700'>
                     {state === 'Sign Up' 
                       ? 'Already have an account? '
@@ -341,24 +346,24 @@ const Login = () => {
                 </div>
 
                 {/* Divider */}
-                <div className='flex items-center gap-3 py-4'>
+                <div className='flex items-center gap-3 py-3 sm:py-4'>
                   <div className='flex-1 h-px bg-linear-to-r from-transparent via-gray-700 to-transparent'></div>
                   <span className='text-xs text-gray-500'>or</span>
                   <div className='flex-1 h-px bg-linear-to-r from-transparent via-gray-700 to-transparent'></div>
                 </div>
 
                 {/* Social Login */}
-                <div className='grid grid-cols-2 gap-3'>
+                <div className='grid grid-cols-2 gap-2 sm:gap-3'>
                   <button
                     type='button'
-                    className='flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 hover:border-primary/50 transition-all duration-300 text-gray-700 hover:text-primary text-sm font-medium'
+                    className='flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-gray-50 border border-gray-300 hover:border-primary/50 transition-all duration-300 text-gray-700 hover:text-primary text-xs sm:text-sm font-medium'
                   >
                     <span>🔵</span>
                     Google
                   </button>
                   <button
                     type='button'
-                    className='flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 hover:border-primary/50 transition-all duration-300 text-gray-700 hover:text-primary text-sm font-medium'
+                    className='flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-gray-50 border border-gray-300 hover:border-primary/50 transition-all duration-300 text-gray-700 hover:text-primary text-xs sm:text-sm font-medium'
                   >
                     <span>🍎</span>
                     Apple
@@ -367,7 +372,7 @@ const Login = () => {
               </form>
 
               {/* Bottom text */}
-              <p className='text-xs text-gray-600 text-center mt-8'>
+              <p className='text-xs text-gray-600 text-center mt-5 sm:mt-6 lg:mt-8 px-2'>
                 By {state === 'Sign Up' ? 'creating an account' : 'logging in'}, you agree to our <button className='text-primary hover:text-indigo-600 transition-colors'>Terms</button> and <button className='text-primary hover:text-indigo-600 transition-colors'>Privacy Policy</button>
               </p>
             </div>
@@ -376,10 +381,10 @@ const Login = () => {
       </div>
 
       {/* Mobile Info (shown on small screens) */}
-      <div className='md:hidden fixed top-0 left-0 right-0 p-4 z-20'>
+      <div className='lg:hidden fixed top-0 left-0 right-0 p-3 sm:p-4 z-20'>
         <button 
           onClick={() => navigate('/')}
-          className='text-gray-800 text-2xl'
+          className='text-gray-800 text-xl sm:text-2xl'
         >
           ← 
         </button>

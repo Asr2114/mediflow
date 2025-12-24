@@ -1,16 +1,20 @@
 import React, { useContext, useEffect, useState, useRef } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { AppContext } from '../context/AppContext';
 import { assets } from '../assets/assets';
 import RelatedDoctors from '../components/RelatedDoctors';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const Appointment = () => {
 
   const {docId} = useParams();
 
-  const {doctors} = useContext(AppContext);
+  const {doctors, backendUrl, token, getDoctorsData} = useContext(AppContext);
 
   const [docInfo, setDocInfo] = useState(null);
+
+  const navigate = useNavigate();
 
   const [docSlots, setDocSlots] = useState([]);
   const [slotIndex, setSlotIndex] = useState(0);
@@ -74,6 +78,40 @@ const Appointment = () => {
       }
 
       setDocSlots(prev => ([...prev, timeSlots]))
+    }
+
+  }
+
+  //book appointment function
+
+  const bookAppointment = async()=>{
+    if(!token){
+      toast.warn('Please login to book Appointment');
+      return navigate('/login');
+    }
+
+    try{
+      const date = docSlots[slotIndex][0].datetime;
+      let day = date.getDate();
+      let month = date.getMonth()+1;
+      let year = date.getFullYear();
+
+      const slotDate = day + '_' + month + "_" + year;
+
+      const {data} = await axios.post(backendUrl + '/api/user/book-appointment', {docId, slotDate, slotTime}, {headers:{token}});
+
+      if(data.success){
+        toast.success(data.message);
+        getDoctorsData();
+        navigate('/my-appointments');
+      } else{
+        toast.error(data.message);
+      }
+      
+
+    } catch(error){
+      console.log("Error booking appointment:", error);
+      toast.error("Error booking appointment: " + error.message);
     }
 
   }
@@ -240,7 +278,7 @@ const Appointment = () => {
               ))}
             </div>
           </div>
-          <button className='group relative bg-gradient-to-r from-primary to-indigo-600 text-white text-sm sm:text-base font-semibold px-10 sm:px-16 py-4 sm:py-5 mt-8 sm:mt-10 rounded-full w-full sm:w-auto overflow-hidden liquid-button shadow-2xl hover:shadow-primary/50 transition-all duration-500'>
+          <button onClick={bookAppointment} className='group relative bg-gradient-to-r from-primary to-indigo-600 text-white text-sm sm:text-base font-semibold px-10 sm:px-16 py-4 sm:py-5 mt-8 sm:mt-10 rounded-full w-full sm:w-auto overflow-hidden liquid-button shadow-2xl hover:shadow-primary/50 transition-all duration-500'>
             <span className='relative z-10 flex items-center justify-center gap-2'>
               Book an Appointment
               <svg className='w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
