@@ -316,21 +316,100 @@ const paymentRazorpay = async(req, res)=>{
         res.json({success:true, order});
 
     } catch(error){
+        console.error("Payment Razorpay Error:", error);
         res.json({success:false, message:error.message})
 
     }
 }
 
+// Generate unique receipt number
+const generateReceiptNumber = () => {
+    const timestamp = Date.now().toString(36).toUpperCase();
+    const random = Math.random().toString(36).substring(2, 8).toUpperCase();
+    return `MF-${timestamp}-${random}`;
+}
 
 //api to verify payment
 const verifyRazorpay = async(req, res)=>{
     try{
-        const {razorpay_order_id} = req.body;
+        const {razorpay_order_id, razorpay_payment_id, razorpay_signature} = req.body;
+        
+        // Create Razorpay instance
+        const razorpayInstance = new Razorpay({
+            key_id: process.env.RAZORPAY_KEY_ID,
+            key_secret: process.env.RAZORPAY_KEY_SECRET
+        });
+        
         const orderInfo = await razorpayInstance.orders.fetch(razorpay_order_id);
+        console.log('Order Info:', orderInfo);
 
-        console.log('Order Info:',orderInfo);
+        if(orderInfo.status === 'paid'){
+            // Generate receipt number
+            const receiptNumber = generateReceiptNumber();
+            
+            // Update the appointment with payment status and details
+            await appointmentModel.findByIdAndUpdate(orderInfo.receipt, {
+                payment: true,
+                paymentDetails: {
+                    razorpay_order_id,
+                    razorpay_payment_id,
+                    razorpay_signature,
+                    paidAt: new Date(),
+                    receiptNumber
+                }
+            });
+            
+            res.json({
+                success: true, 
+                message: "Payment successful",
+                receiptNumber
+            });
+        } else {
+            res.json({success: false, message: "Payment not completed"});
+        }
 
-    }catch(error){}
+    }catch(error){
+        console.error("Verify Razorpay Error:", error);
+        res.json({success: false, message: error.message});
+    }
 }
 
-export { registerUser, loginUser, getProfile, updateProfile, bookAppointment, listAppointments, cancelAppointment, paymentRazorpay,verifyRazorpay }; 
+// API to get receipt data
+const getReceipt = async(req, res) => {
+    try {
+        const {appointmentId} = req.body;
+        const appointment = await appointmentModel.findById(appointmentId);
+        
+        if(!appointment) {
+            return res.json({success: false, message: "Appointment not found"});
+        }
+        
+        if(!appointment.payment) {
+            return res.json({success: false, message: "Payment not completed for this appointment"});
+        }
+        
+        const receiptData = {
+            receiptNumber: appointment.paymentDetails?.receiptNumber || 'N/A',
+            patientName: appointment.userData?.name || 'N/A',
+            patientEmail: appointment.userData?.email || 'N/A',
+            doctorName: appointment.docData?.name || 'N/A',
+            doctorSpeciality: appointment.docData?.speciality || 'N/A',
+            doctorAddress: appointment.docData?.address || {},
+            appointmentDate: appointment.slotDate,
+            appointmentTime: appointment.slotTime,
+            amount: appointment.amount,
+            paymentId: appointment.paymentDetails?.razorpay_payment_id || 'N/A',
+            orderId: appointment.paymentDetails?.razorpay_order_id || 'N/A',
+            paidAt: appointment.paymentDetails?.paidAt || new Date(),
+            bookingDate: new Date(appointment.date)
+        };
+        
+        res.json({success: true, receiptData});
+        
+    } catch(error) {
+        console.error("Get Receipt Error:", error);
+        res.json({success: false, message: error.message});
+    }
+}
+
+export { registerUser, loginUser, getProfile, updateProfile, bookAppointment, listAppointments, cancelAppointment, paymentRazorpay, verifyRazorpay, getReceipt }; 

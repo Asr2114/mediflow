@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../context/AppContext'
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import Receipt from '../components/Receipt/Receipt';
 
 const MyAppointments = () => {
 
@@ -9,6 +10,9 @@ const MyAppointments = () => {
   const {backendUrl, token} = useContext(AppContext);
 
   const [appointments, setAppointments] = useState([]);
+  const [showReceipt, setShowReceipt] = useState(false);
+  const [receiptData, setReceiptData] = useState(null);
+  const [loadingReceipt, setLoadingReceipt] = useState(false);
 
   const getUserAppointments = async()=>{
     try{
@@ -49,48 +53,113 @@ const MyAppointments = () => {
   }
 
   const initPay = (order)=>{
+    console.log("Initializing payment with order:", order);
+    console.log("Razorpay Key:", import.meta.env.VITE_RAZORPAY_KEY_ID);
+    
     const options = {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-      amount:order.amount,
-      currency:order.currency,
-      name:"MediFlow",
-      description:"Appointment Payment",
-      order_id:order.id,
-      receipt:order.receipt,
-      handler:async (response) =>{
-        console.log("Payment Success:", Response);
-        toast.success('Payment successful');
-
-        
+      amount: order.amount,
+      currency: order.currency,
+      name: "MediFlow",
+      description: "Appointment Payment",
+      order_id: order.id,
+      receipt: order.receipt,
+      handler: async (response) => {
+        console.log("Payment Success:", response);
+        try {
+          const {data} = await axios.post(backendUrl + '/api/user/verify-razorpay', {
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature
+          }, {headers: {token}});
+          
+          if(data.success) {
+            toast.success('Payment successful!');
+            getUserAppointments();
+          } else {
+            toast.error(data.message);
+          }
+        } catch(error) {
+          console.error("Verification error:", error);
+          toast.error("Payment verification failed");
+        }
+      },
+      prefill: {
+        name: "Patient",
+        email: "patient@example.com",
+      },
+      theme: {
+        color: "#5f6fff"
       }
     }
 
-    const rzp = new window.Razorpay(options);
-    rzp.open();
+    console.log("Razorpay options:", options);
+    
+    if (typeof window.Razorpay === 'undefined') {
+      toast.error("Razorpay SDK not loaded. Please refresh the page.");
+      return;
+    }
 
+    const rzp = new window.Razorpay(options);
+    rzp.on('payment.failed', function (response) {
+      console.error("Payment failed:", response.error);
+      toast.error("Payment failed: " + response.error.description);
+    });
+    rzp.open();
   }
 
   const appointmentRazorpay = async(appointmentId) =>{
     try{
+      console.log("Starting payment for appointment:", appointmentId);
       const {data} = await axios.post(backendUrl + '/api/user/payment-razorpay', {appointmentId}, {headers:{token}});
+      console.log("Payment API response:", data);
+      
       if(data.success){
-        toast.success("Payment initiated successfully");
-        
         initPay(data.order);
       } else{
         toast.error(data.message);
       }
 
     }catch(error){
+      console.error("Payment error:", error);
       toast.error("Error in payment: " + error.message);
     }
+  }
 
-
+  // Download Receipt Function
+  const downloadReceipt = async(appointmentId) => {
+    try {
+      setLoadingReceipt(true);
+      const {data} = await axios.post(backendUrl + '/api/user/get-receipt', {appointmentId}, {headers: {token}});
+      
+      if(data.success) {
+        setReceiptData(data.receiptData);
+        setShowReceipt(true);
+      } else {
+        toast.error(data.message);
+      }
+    } catch(error) {
+      console.error("Receipt error:", error);
+      toast.error("Error fetching receipt: " + error.message);
+    } finally {
+      setLoadingReceipt(false);
+    }
   }
   
 
   return (
     <div className='px-4 sm:px-0 animate-fade-in'>
+      {/* Receipt Modal */}
+      {showReceipt && (
+        <Receipt 
+          receiptData={receiptData} 
+          onClose={() => {
+            setShowReceipt(false);
+            setReceiptData(null);
+          }} 
+        />
+      )}
+
       <div className='mb-8 animate-fade-in-up'>
         <h1 className='text-3xl sm:text-4xl font-bold text-gray-900 mb-2'>
           My <span className='bg-linear-to-r from-primary to-indigo-600 bg-clip-text text-transparent'>Appointments</span>
@@ -149,7 +218,8 @@ const MyAppointments = () => {
               </div>
 
               <div className='flex flex-row sm:flex-col gap-3 justify-start sm:justify-center mt-2 sm:mt-0'>
-                {!item.cancelled && !item.isCompleted && (
+                {/* Not cancelled, not completed, and NOT paid - Show Pay Online */}
+                {!item.cancelled && !item.isCompleted && !item.payment && (
                   <>
                     <button onClick={()=>appointmentRazorpay(item._id)} className='group/btn relative bg-linear-to-r from-primary to-indigo-600 text-white text-sm font-semibold text-center w-full sm:min-w-48 py-3 rounded-xl overflow-hidden shadow-lg hover:shadow-xl hover:shadow-primary/30 transition-all duration-500'>
                       <span className='relative z-10 flex items-center justify-center gap-2'>
@@ -167,6 +237,31 @@ const MyAppointments = () => {
                     </button>
                   </>
                 )}
+
+                {/* Payment completed - Show Paid status and Download Receipt */}
+                {!item.cancelled && !item.isCompleted && item.payment && (
+                  <>
+                    <div className='flex items-center justify-center gap-2 w-full sm:min-w-48 py-3 bg-green-50 border border-green-200 rounded-xl text-green-600 text-sm font-semibold'>
+                      <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' />
+                      </svg>
+                      Paid ✓
+                    </div>
+                    <button 
+                      onClick={()=>downloadReceipt(item._id)} 
+                      disabled={loadingReceipt}
+                      className='group/btn relative bg-linear-to-r from-emerald-500 to-teal-600 text-white text-sm font-semibold text-center w-full sm:min-w-48 py-3 rounded-xl overflow-hidden shadow-lg hover:shadow-xl hover:shadow-emerald-500/30 transition-all duration-500 disabled:opacity-50'
+                    >
+                      <span className='relative z-10 flex items-center justify-center gap-2'>
+                        <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                          <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' />
+                        </svg>
+                        {loadingReceipt ? 'Loading...' : 'Download Receipt'}
+                      </span>
+                    </button>
+                  </>
+                )}
+
                 {item.cancelled && (
                   <div className='flex items-center justify-center gap-2 w-full sm:min-w-48 py-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm font-semibold'>
                     <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -176,12 +271,26 @@ const MyAppointments = () => {
                   </div>
                 )}
                 {item.isCompleted && (
-                  <div className='flex items-center justify-center gap-2 w-full sm:min-w-48 py-3 bg-green-50 border border-green-200 rounded-xl text-green-600 text-sm font-semibold'>
-                    <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' />
-                    </svg>
-                    Completed
-                  </div>
+                  <>
+                    <div className='flex items-center justify-center gap-2 w-full sm:min-w-48 py-3 bg-green-50 border border-green-200 rounded-xl text-green-600 text-sm font-semibold'>
+                      <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' />
+                      </svg>
+                      Completed
+                    </div>
+                    {item.payment && (
+                      <button 
+                        onClick={()=>downloadReceipt(item._id)} 
+                        disabled={loadingReceipt}
+                        className='text-sm font-semibold text-center w-full sm:min-w-48 py-3 border-2 border-emerald-200 rounded-xl hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-all duration-300 cursor-pointer text-emerald-600 flex items-center justify-center gap-2 disabled:opacity-50'
+                      >
+                        <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                          <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' />
+                        </svg>
+                        {loadingReceipt ? 'Loading...' : 'Download Receipt'}
+                      </button>
+                    )}
+                  </>
                 )}
               </div>
             </div>

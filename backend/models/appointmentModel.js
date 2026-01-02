@@ -24,7 +24,14 @@ const appointmentSchema = new mongoose.Schema({
 
     isCompleted:{type:Boolean, default:false},
 
-
+    // Payment details for receipt
+    paymentDetails: {
+        razorpay_order_id: {type: String, default: ''},
+        razorpay_payment_id: {type: String, default: ''},
+        razorpay_signature: {type: String, default: ''},
+        paidAt: {type: Date, default: null},
+        receiptNumber: {type: String, default: ''}
+    }
 
 })
 

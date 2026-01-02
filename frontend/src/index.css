@@ -478,3 +478,36 @@ html {
   animation: ring-fill 1.5s ease-out forwards;
 }
 
+/* Print styles for receipt */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  #receipt-content,
+  #receipt-content * {
+    visibility: visible;
+  }
+  
+  #receipt-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 20px;
+    background: white !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+  
+  /* Preserve colors in print */
+  .bg-green-100 { background-color: #dcfce7 !important; }
+  .bg-blue-50 { background-color: #eff6ff !important; }
+  .bg-gray-50 { background-color: #f9fafb !important; }
+  .text-green-700 { color: #15803d !important; }
+  .text-primary { color: #5f6fff !important; }
+}
